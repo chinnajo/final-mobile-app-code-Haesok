@@ -1,0 +1,87 @@
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {faCircleUser} from '@fortawesome/free-solid-svg-icons/faCircleUser';
+library.add(faCircleUser);
+
+   <FontAwesomeIcon icon={faCircleUser} style={{color: '#525456'}} />
+
+
+const LoginScreen = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {};
+
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require('./assets/logo.png')}
+        style={{width: 200, height: 200, marginBottom: 50}}
+      />
+
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Email"
+          placeholderTextColor="#000"
+          onChangeText={text => setEmail(text)}
+          value={email}
+        />
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Password"
+          placeholderTextColor="#000"
+          secureTextEntry
+          onChangeText={text => setPassword(text)}
+          value={password}
+        />
+      </View>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
+        <Text style={styles.loginText}>LOGIN</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#D8D8D8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    fontWeight: 'bold',
+    fontSize: 50,
+    color: '#fb5b5a',
+    marginBottom: 40,
+  },
+  inputView: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  inputText: {
+    height: 50,
+    color: '#000',
+  },
+  loginBtn: {
+    width: '80%',
+    backgroundColor: '#1363DF',
+    borderRadius: 15,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    marginBottom: 10,
+  },
+  loginText: {
+    color: 'white',
+  },
+});
