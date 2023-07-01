@@ -66,9 +66,9 @@ const HomeScreen = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const resdata = response.data
+      const resdata = response.data;
       console.log(resdata, 'dsf');
-      
+
       const status = await api.get('/status/mobileapp', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -195,7 +195,12 @@ const HomeScreen = () => {
               ))}
             </View>
             <Text
-              style={{width: '100%', textAlign: 'center', fontWeight: 'bold',marginVertical:10}}>
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginVertical: 10,
+              }}>
               Total Job Details
             </Text>
           </View>
@@ -210,7 +215,12 @@ const HomeScreen = () => {
             </View>
 
             <Text
-              style={{width: '100%', textAlign: 'center', fontWeight: 'bold',marginVertical:10}}>
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                fontWeight: 'bold',
+                marginVertical: 10,
+              }}>
               Job Status Details
             </Text>
           </View>

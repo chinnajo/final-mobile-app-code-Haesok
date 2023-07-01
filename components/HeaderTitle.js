@@ -24,7 +24,7 @@ const CustomHeaderTitle = ({color, fontsize}) => {
       style={{
         color: color,
         fontSize: fontsize,
-        fontWeight:'bold'
+        fontWeight: 'bold',
       }}>{`Hello ${headerTitle} `}</Text>
   );
 };

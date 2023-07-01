@@ -76,7 +76,7 @@ const JobDetailsScreen = () => {
     const data = response.data;
     setjobdatas(data);
   }
-  console.log(jobdatas)
+  console.log(jobdatas);
 
   const handleChangeText = newText => {
     setText(newText);
@@ -90,7 +90,7 @@ const JobDetailsScreen = () => {
   const textAreaStyle = {
     ...styles.textArea,
     height: Math.max(35, textHeight),
-    fontSize:12
+    fontSize: 12,
   };
 
   const handleOptionSelect = options => {
@@ -103,16 +103,17 @@ const JobDetailsScreen = () => {
   const condition = false;
 
   return (
-    <View style={{flex: 1,fontSize:12}}>
-      <ScrollView contentContainerStyle={{flexGrow: 1, padding: 16,fontSize:12}}>
+    <View style={{flex: 1, fontSize: 12}}>
+      <ScrollView
+        contentContainerStyle={{flexGrow: 1, padding: 16, fontSize: 12}}>
         <Text
           style={{
             textAlign: 'center',
             fontSize: 16,
             marginBottom: 20,
-            color: '#000',
+            color: '#36454F',
             fontWeight: 'bold',
-            width: 400,
+            width: '100%',
           }}>
           JOB DETAILS
         </Text>
@@ -135,8 +136,9 @@ const JobDetailsScreen = () => {
                   style={{
                     textAlign: 'left',
                     fontWeight: 'bold',
-                    marginLeft: 40,
+                    marginLeft: 30,
                     fontSize: 12,
+                    color: '#36454F',
                   }}>
                   {data.code.toString()}
                 </Text>
@@ -155,8 +157,9 @@ const JobDetailsScreen = () => {
                   style={{
                     textAlign: 'left',
                     fontWeight: 'bold',
-                    marginLeft: 40,
+                    marginLeft: 30,
                     fontSize: 12,
+                    color: '#36454F',
                   }}>
                   {data.code.toString()}
                 </Text>
@@ -185,8 +188,9 @@ const JobDetailsScreen = () => {
                     style={{
                       textAlign: 'left',
                       fontWeight: 'bold',
-                      marginLeft: 40,
+                      marginLeft: 30,
                       fontSize: 12,
+                      color: '#36454F',
                     }}>
                     {data.code.toString()}
                   </Text>
@@ -205,7 +209,7 @@ const JobDetailsScreen = () => {
                 style={{
                   flex: 1,
                   alignItems: 'center',
-                  marginVertical:10
+                  marginVertical: 15,
                 }}>
                 {/* {data.map((label, index) => ( */}
                 {/* <View key={index}> */}
@@ -215,7 +219,8 @@ const JobDetailsScreen = () => {
                     fontWeight: 'bold',
                     textAlign: 'left',
                     width: 300,
-                    marginBottom:10
+                    marginBottom: 3,
+                    color: '#36454F',
                   }}>
                   {data.code.toString()}
                 </Text>
@@ -227,20 +232,19 @@ const JobDetailsScreen = () => {
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
-                        marginHorizontal: 10,
+                        marginHorizontal: 15,
                       }}>
                       <Text>{option}</Text>
                       <View
                         style={{
-                          width: 20,
-                          height: 20,
+                          width: 10,
+                          height: 10,
                           borderWidth: 1,
-                      
-
+                          marginTop: 3,
                           borderColor:
-                            data.value === option ? '#1363DF' : 'gray',
+                            data.value === option ? '#1363DF' : '#36454F',
                           borderRadius: 10,
-                          marginLeft: 5,
+                          marginLeft: 4,
                           backgroundColor:
                             data.value === option ? '#1363DF' : 'transparent',
                         }}
@@ -253,10 +257,14 @@ const JobDetailsScreen = () => {
               </View>
             )}
             {data.type === 'singleSelect' && (
-              <View
-                style={{ width: '80%', alignSelf: 'center'}}>
+              <View style={{width: '80%', alignSelf: 'center'}}>
                 <Text
-                  style={{textAlign: 'left', fontWeight: 'bold', fontSize: 12}}>
+                  style={{
+                    textAlign: 'left',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                    color: '#36454F',
+                  }}>
                   {data.code.toString()}
                 </Text>
 
@@ -268,10 +276,14 @@ const JobDetailsScreen = () => {
             )}
 
             {data.type === 'multiSelect' && (
-              <View
-                style={{ width: '80%', alignSelf: 'center'}}>
+              <View style={{width: '80%', alignSelf: 'center'}}>
                 <Text
-                  style={{textAlign: 'left', fontWeight: 'bold', fontSize: 12}}>
+                  style={{
+                    textAlign: 'left',
+                    fontWeight: 'bold',
+                    fontSize: 12,
+                    color: '#36454F',
+                  }}>
                   {data.code.toString()}
                 </Text>
 
