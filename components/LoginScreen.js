@@ -48,26 +48,19 @@ const LoginScreen = () => {
     const body = {
       email: inputValue,
     };
-    if(body.email !== '')  {
-    const response = await api.put('/login/mobileapp/resetPassword', body);
-    ToastAndroid.show(
-      'Password has been sent to your Email!',
-      ToastAndroid.SHORT,
-    );
-    toggleModal();
-    }
-    else{
+    if (body.email !== '') {
+      const response = await api.put('/login/mobileapp/resetPassword', body);
       ToastAndroid.show(
-        'This field cannot be empty !',
+        'Password has been sent to your Email!',
         ToastAndroid.SHORT,
       );
+      toggleModal();
+    } else {
+      ToastAndroid.show('This field cannot be empty !', ToastAndroid.SHORT);
     }
 
     // console.log('User input:', inputValue);
     // Alert.alert('Password has been sent to your Email!');
-   
-
-
   };
 
   const handleLogin = async () => {
@@ -75,6 +68,7 @@ const LoginScreen = () => {
       email: email,
       password: password,
     };
+<<<<<<< HEAD
    await api.post('/login/mobileapp/client', body)
     .then(response => {
       const data = response.data;
@@ -108,6 +102,45 @@ const LoginScreen = () => {
       }
       // console.log(error);
     });
+=======
+    await api
+      .post('/login/mobileapp/client', body)
+      .then(response => {
+        const data = response.data;
+        AsyncStorage.setItem('authToken', data.token);
+        AsyncStorage.setItem('email', data.email);
+        const client = data.client;
+        return AsyncStorage.getItem('authToken')
+          .then(token =>
+            api.get(`/clients/mobileapp/${client}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          )
+          .then(clientresponse => {
+            const clientname = clientresponse.data.name;
+            AsyncStorage.setItem('client', clientname);
+            console.log('login successful');
+            navigation.navigate('Tab');
+          })
+          .catch(error => {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 400) {
+          ToastAndroid.show(
+            'Incorrect username or password',
+            ToastAndroid.SHORT,
+          );
+        } else {
+          ToastAndroid.show('Network error', ToastAndroid.SHORT);
+        }
+        console.log(error);
+      });
+>>>>>>> af362ea802d64dd1911f0742437c7313ace7978d
 
     // try {
     //   const response = await api.post('/login/client', body);
@@ -139,7 +172,7 @@ const LoginScreen = () => {
         <View style={styles.container}>
           <Image
             source={require('../assets/logo.png')}
-            style={{width: 130, height: 130, marginBottom: 50}}
+            style={{width: 130, height: 130, marginBottom: 100}}
           />
 
           <View style={styles.inputView}>
@@ -175,7 +208,9 @@ const LoginScreen = () => {
           <View
             style={{flex: 0.2, justifyContent: 'center', alignItems: 'center'}}>
             <TouchableOpacity onPress={toggleModal}>
-              <Text style={{color: '#000',marginVertical:20}}>Forgot Password?</Text>
+              <Text style={{color: '#000', marginVertical: 20}}>
+                Forgot Password?
+              </Text>
             </TouchableOpacity>
           </View>
 

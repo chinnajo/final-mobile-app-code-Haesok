@@ -94,9 +94,9 @@ const HeaderRightIcon = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#1363DF',
-                borderRadius: 5,
+                borderRadius: 20,
                 height: 40,
-                width: 200,
+                width: 170,
               }}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.modalButtonText}>Close</Text>
@@ -184,9 +184,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#1363DF',
-    borderRadius: 5,
+    borderRadius: 20,
     height: 40,
-    width: 200,
+    width: 170,
   },
   modalButtonText: {
     fontSize: 14,
