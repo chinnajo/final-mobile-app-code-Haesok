@@ -66,7 +66,7 @@ const JobDetailsScreen = () => {
   }, []);
   async function jobdata() {
     const id = await AsyncStorage.getItem('id');
-
+    // console.log(id, 'id');
     const token = await AsyncStorage.getItem('authToken');
     const response = await api.get(`/jobData/mobileapp/${Number(id)}`, {
       headers: {
@@ -76,7 +76,7 @@ const JobDetailsScreen = () => {
     const data = response.data;
     setjobdatas(data);
   }
-  console.log(jobdatas)
+  // console.log(jobdatas)
 
   const handleChangeText = newText => {
     setText(newText);
@@ -220,7 +220,7 @@ const JobDetailsScreen = () => {
                   {data.code.toString()}
                 </Text>
                 <View style={{flexDirection: 'row'}}>
-                  {data.name.map(option => (
+                  {(data.name?data.name : []).map(option => (
                     <TouchableOpacity
                       key={option}
                       onPress={() => handleOptionSelectRadio(index, option)}

@@ -80,7 +80,7 @@ const DocumentScreen = () => {
     const data = response.data;
     setjobdatas(data);
   }
-  console.log(jobdatas);
+  // console.log(jobdatas);
 
   return (
     <View>

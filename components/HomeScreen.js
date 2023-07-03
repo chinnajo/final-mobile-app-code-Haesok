@@ -67,7 +67,7 @@ const HomeScreen = () => {
         },
       });
       const resdata = response.data
-      console.log(resdata, 'dsf');
+      // console.log(resdata, 'dsf');
       
       const status = await api.get('/status/mobileapp', {
         headers: {

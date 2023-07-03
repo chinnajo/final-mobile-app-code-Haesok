@@ -90,21 +90,23 @@ const LoginScreen = () => {
         .then(clientresponse => {
           const clientname = clientresponse.data.name;
           AsyncStorage.setItem('client', clientname);
-          console.log('login successful');
+          ToastAndroid.show('Logged in Successfully', ToastAndroid.SHORT);
           navigation.navigate('Tab');
         })
         .catch(error => {
           ToastAndroid.show('Server error', ToastAndroid.SHORT);
-          console.log(error);
+          // console.log(error);
         });
     })
     .catch(error => {
-      if (error.response && error.response.status === 401) {
-        ToastAndroid.show('Incorrect password', ToastAndroid.SHORT);
-      } else {
+      if (error.response && error.response.status === 400) {
+        ToastAndroid.show('Incorrect Username or Password!', ToastAndroid.SHORT);
+      } else if(error.response && error.response.status === 401) {
         ToastAndroid.show('Network error', ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
       }
-      console.log(error);
+      // console.log(error);
     });
 
     // try {

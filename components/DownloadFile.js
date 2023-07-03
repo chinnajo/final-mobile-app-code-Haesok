@@ -13,13 +13,13 @@ const downloadFile = (url, fileName) => {
   })
     .fetch('GET', url)
     .then(res => {
-      console.log('File downloaded to:', res.path());
+      // console.log('File downloaded to:', res.path());
       // Alert.alert('File downloaded successfully');
       ToastAndroid.show('Downloaded Successfully', ToastAndroid.SHORT);
       // Additional logic after successful download, e.g., open the file or show a notification
     })
     .catch(error => {
-      console.log('Error downloading file:', error);
+      // console.log('Error downloading file:', error);
       // Handle the error appropriately
       ToastAndroid.show('Error downloading!', ToastAndroid.SHORT);
       // Alert.alert('Error downloading');
