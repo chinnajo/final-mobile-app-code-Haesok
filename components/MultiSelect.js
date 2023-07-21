@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#dde6f7',
     padding: 10,
-    // margin: 10,
-    width: 300,
+    width:'100%',
+    maxWidth: 400,
     marginVertical: 10,
     color:'#000',fontSize:12
   },

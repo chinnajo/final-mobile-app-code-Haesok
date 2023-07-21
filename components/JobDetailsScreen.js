@@ -66,7 +66,7 @@ const JobDetailsScreen = () => {
   }, []);
   async function jobdata() {
     const id = await AsyncStorage.getItem('id');
-    // console.log(id, 'id');
+
     const token = await AsyncStorage.getItem('authToken');
     const response = await api.get(`/jobData/mobileapp/${Number(id)}`, {
       headers: {
@@ -76,11 +76,7 @@ const JobDetailsScreen = () => {
     const data = response.data;
     setjobdatas(data);
   }
-<<<<<<< HEAD
-  // console.log(jobdatas)
-=======
   console.log(jobdatas);
->>>>>>> af362ea802d64dd1911f0742437c7313ace7978d
 
   const handleChangeText = newText => {
     setText(newText);
@@ -107,21 +103,28 @@ const JobDetailsScreen = () => {
   const condition = false;
 
   return (
-    <View style={{flex: 1, fontSize: 12}}>
+    <View
+      style={{flex: 1, fontSize: 12, color: '#000', justifyContent: 'center'}}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1, padding: 16, fontSize: 12}}>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 16,
-            marginBottom: 20,
-            color: '#36454F',
-            fontWeight: 'bold',
-            width: '100%',
-          }}>
-          JOB DETAILS
-        </Text>
-        {/* <TouchableOpacity
+        contentContainerStyle={{
+          flexGrow: 1,
+          marginVertical: 10,
+          paddingVertical: 10,
+          fontSize: 12,
+        }}>
+        <View style={{width: '84%', alignSelf: 'center', maxWidth: 400}}>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 16,
+              marginBottom: 20,
+              color: '#000',
+              fontWeight: 'bold',
+              width: '100%',
+            }}>
+            JOB DETAILS
+          </Text>
+          {/* <TouchableOpacity
             style={{alignSelf: 'flex-end', marginLeft: 60, marginBottom: 20}}
             onPress={() => navigation.navigate('Document')}>
             <FontAwesomeIcon
@@ -132,71 +135,21 @@ const JobDetailsScreen = () => {
             <Text style={{fontSize: 8}}>Documents</Text>
           </TouchableOpacity> */}
 
-        {jobdatas.map((data, index) => (
-          <View key={index}>
-            {data.type === 'text' && (
-              <>
-                <Text
-                  style={{
-                    textAlign: 'left',
-                    fontWeight: 'bold',
-                    marginLeft: 30,
-                    fontSize: 12,
-                    color: '#36454F',
-                  }}>
-                  {data.code.toString()}
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder=""
-                  value={data.value.toString()}
-                  editable={false}
-                />
-              </>
-            )}
-
-            {data.type === 'number' && <Text>{data.code.toString()}</Text> && (
-              <>
-                <Text
-                  style={{
-                    textAlign: 'left',
-                    fontWeight: 'bold',
-                    marginLeft: 30,
-                    fontSize: 12,
-                    color: '#36454F',
-                  }}>
-                  {data.code.toString()}
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder=""
-                  value={data.value.toString()}
-                  editable={false}
-                />
-              </>
-            )}
-            {data.type === 'textarea' && (
-              <TextInput
-                multiline
-                value={text}
-                onChangeText={handleChangeText}
-                onContentSizeChange={handleContentSizeChange}
-                style={textAreaStyle}
-              />
-            )}
-
-            {data.type === 'date' && (
-              <View>
+          {jobdatas.map((data, index) => (
+            <View key={index}>
+              {data.type === 'text' && (
                 <>
                   <Text
                     style={{
                       textAlign: 'left',
                       fontWeight: 'bold',
-                      marginLeft: 30,
+
                       fontSize: 12,
-                      color: '#36454F',
+                      color: '#000',
                     }}>
-                    {data.code.toString()}
+                    {data.code.toString().includes('primary')
+                      ? data.code.toString().split('.')[1]
+                      : data.code.toString()}
                   </Text>
                   <TextInput
                     style={styles.input}
@@ -205,111 +158,166 @@ const JobDetailsScreen = () => {
                     editable={false}
                   />
                 </>
-              </View>
-            )}
+              )}
 
-            {data.type === 'radio' && (
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: 'center',
-                  marginVertical: 15,
-                }}>
-                {/* {data.map((label, index) => ( */}
-                {/* <View key={index}> */}
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 'bold',
-                    textAlign: 'left',
-                    width: 300,
-                    marginBottom: 3,
-                    color: '#36454F',
-                  }}>
-                  {data.code.toString()}
-                </Text>
-                <View style={{flexDirection: 'row'}}>
-                  {(data.name?data.name : []).map(option => (
-                    <TouchableOpacity
-                      key={option}
-                      onPress={() => handleOptionSelectRadio(index, option)}
+              {data.type === 'number' && (
+                  <Text>{data.code.toString()}</Text>
+                ) && (
+                  <>
+                    <Text
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginHorizontal: 15,
+                        textAlign: 'left',
+                        fontWeight: 'bold',
+
+                        fontSize: 12,
+                        color: '#000',
                       }}>
-                      <Text>{option}</Text>
-                      <View
-                        style={{
-                          width: 10,
-                          height: 10,
-                          borderWidth: 1,
-                          marginTop: 3,
-                          borderColor:
-                            data.value === option ? '#1363DF' : '#36454F',
-                          borderRadius: 10,
-                          marginLeft: 4,
-                          backgroundColor:
-                            data.value === option ? '#1363DF' : 'transparent',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  ))}
-                </View>
-                {/* </View> */}
-                {/* ))} */}
-              </View>
-            )}
-            {data.type === 'singleSelect' && (
-              <View style={{width: '80%', alignSelf: 'center'}}>
-                <Text
-                  style={{
-                    textAlign: 'left',
-                    fontWeight: 'bold',
-                    fontSize: 12,
-                    color: '#36454F',
-                  }}>
-                  {data.code.toString()}
-                </Text>
-
-                <SingleSelect
-                  options={data.value}
-                  onSelect={handleOptionSelect}
-                />
-              </View>
-            )}
-
-            {data.type === 'multiSelect' && (
-              <View style={{width: '80%', alignSelf: 'center'}}>
-                <Text
-                  style={{
-                    textAlign: 'left',
-                    fontWeight: 'bold',
-                    fontSize: 12,
-                    color: '#36454F',
-                  }}>
-                  {data.code.toString()}
-                </Text>
-
-                <MultiSelect
-                  options={data.value}
-                  onSelect={handleOptionSelect}
-                  style={textAreaStyle}
+                      {data.code.toString()}
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder=""
+                      value={data.value.toString()}
+                      editable={false}
+                    />
+                  </>
+                )}
+              {data.type === 'textarea' && (
+                <TextInput
                   multiline
+                  value={text}
                   onChangeText={handleChangeText}
                   onContentSizeChange={handleContentSizeChange}
+                  style={textAreaStyle}
                 />
-              </View>
-            )}
-            {/* </View> */}
-            {/* ))} */}
-          </View>
-        ))}
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Document')}
-          style={styles.button}>
-          <Text style={{color: '#fff'}}>Documents</Text>
-        </TouchableOpacity>
+              )}
+
+              {data.type === 'date' && (
+                <View>
+                  <>
+                    <Text
+                      style={{
+                        textAlign: 'left',
+                        fontWeight: 'bold',
+
+                        fontSize: 12,
+                        color: '#000',
+                      }}>
+                      {data.code.toString()}
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      placeholder=""
+                      value={data.value.toString()}
+                      editable={false}
+                    />
+                  </>
+                </View>
+              )}
+
+              {data.type === 'radio' && (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    marginVertical: 10,
+                  }}>
+                  {/* {data.map((label, index) => ( */}
+                  {/* <View key={index}> */}
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 'bold',
+                      textAlign: 'left',
+                      width: '100%',
+                      marginBottom: 10,
+                      color: '#000',
+                    }}>
+                    {data.code.toString()}
+                  </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    {data.name.map(option => (
+                      <TouchableOpacity
+                        key={option}
+                        onPress={() => handleOptionSelectRadio(index, option)}
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginHorizontal: 10,
+                        }}>
+                        <Text style={{color: '#000'}}>{option}</Text>
+                        <View
+                          style={{
+                            width: 15,
+                            height: 15,
+                            borderWidth: 1,
+
+                            borderColor:
+                              data.value === option ? '#1363DF' : 'black',
+                            borderRadius: 10,
+                            marginLeft: 5,
+                            backgroundColor:
+                              data.value === option ? '#1363DF' : 'transparent',
+                          }}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                  {/* </View> */}
+                  {/* ))} */}
+                </View>
+              )}
+              {data.type === 'singleSelect' && (
+                <View style={{width: '100%', alignSelf: 'center'}}>
+                  <Text
+                    style={{
+                      textAlign: 'left',
+                      fontWeight: 'bold',
+                      fontSize: 12,
+                      color: '#000',
+                    }}>
+                    {data.code.toString()}
+                  </Text>
+
+                  <SingleSelect
+                    options={data.value}
+                    onSelect={handleOptionSelect}
+                  />
+                </View>
+              )}
+
+              {data.type === 'multiSelect' && (
+                <View style={{width: '100%', alignSelf: 'center'}}>
+                  <Text
+                    style={{
+                      textAlign: 'left',
+                      fontWeight: 'bold',
+                      fontSize: 12,
+                      color: '#000',
+                    }}>
+                    {data.code.toString()}
+                  </Text>
+
+                  <MultiSelect
+                    options={data.value}
+                    onSelect={handleOptionSelect}
+                    style={textAreaStyle}
+                    multiline
+                    onChangeText={handleChangeText}
+                    onContentSizeChange={handleContentSizeChange}
+                  />
+                </View>
+              )}
+              {/* </View> */}
+              {/* ))} */}
+            </View>
+          ))}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Document')}
+            style={styles.button}>
+            <Text style={{color: '#fff'}}>Documents</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -323,7 +331,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#dde6f7',
     padding: 10,
     margin: 10,
-    width: 300,
+    width:'100%',
+    maxWidth: 400,
     height: 40,
     marginVertical: 10,
     color: '#000',
@@ -336,7 +345,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#dde6f7',
     padding: 10,
     margin: 10,
-    width: 300,
+    width:'100%',
+    maxWidth: 400,
     height: 40,
     marginVertical: 10,
     fontSize: 12,
@@ -351,7 +361,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     padding: 8,
     margin: 8,
-    marginVertical: 10,
+    marginVertical: 30,
   },
 });
 

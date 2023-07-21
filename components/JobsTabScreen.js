@@ -22,7 +22,7 @@ export default function TabScreen() {
         headerTitleAlign: 'left',
         headerTitleStyle: {fontSize: 16},
         headerStyle: {
-          height: 50,
+          height: 55,
         
           //backgroundColor:'#efefef'
         

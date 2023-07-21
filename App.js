@@ -1,4 +1,5 @@
-import LoginScreen from './components/LoginScreen';
+// import LoginScreen from './components/LoginScreen';
+import LoginFinger from './components/LoginFinger';
 import JobsTabScreen from './components/JobsTabScreen';
 import JobDetailsScreen from './components/JobDetailsScreen';
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,7 +30,8 @@ function App() {
           headerTitleAlign: 'center',
         }}>
         <Stack.Group screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Login" component={LoginScreen} />
+          {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
+          <Stack.Screen name="Login" component={LoginFinger} />
         </Stack.Group>
 
         <Stack.Screen

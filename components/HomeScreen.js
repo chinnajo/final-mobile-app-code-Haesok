@@ -66,15 +66,9 @@ const HomeScreen = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-<<<<<<< HEAD
-      const resdata = response.data
-      // console.log(resdata, 'dsf');
-      
-=======
       const resdata = response.data;
       console.log(resdata, 'dsf');
 
->>>>>>> af362ea802d64dd1911f0742437c7313ace7978d
       const status = await api.get('/status/mobileapp', {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -168,70 +162,69 @@ const HomeScreen = () => {
         flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'space-around',
-        position: 'relative',
       }}>
-      <View style={{position: 'absolute', flex: 1}}>
-        <Text
-          style={{
-            textAlign: 'center',
-            width: 400,
-            letterSpacing: 50,
-            fontSize: 24,
-            bottom: '100%',
-            opacity: 0.3,
-            color: '#4388ef',
-          }}>
-          {isPortrait ? '  HAESOK' : ' '}
-        </Text>
-      </View>
-      <View>
-        <ScrollView>
-          <View>
-            <View style={{marginVertical: 30}}>
-              {donutChartData.map((data, index) => (
-                <View
-                  key={index}
-                  style={{
-                    backgroundColor: '#fff',
+      <ScrollView contentContainerStyle={{flex:1,justifyContent:'space-around',alignContent:'center'}}>
+        <View style={{justifyContent: 'space-evenly'}}>
+          <Text
+            style={{
+              textAlign: 'center',
 
-                    marginTop: 5,
-                  }}>
-                  <ProgressBar percentage={data.value} label={data.label} />
-                </View>
-              ))}
-            </View>
-            <Text
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                marginVertical: 10,
-              }}>
-              Total Job Details
-            </Text>
-          </View>
-          <View>
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-                backgroundColor: '#fff',
-              }}>
-              <TestDonutChart data={pieChartData} />
-            </View>
+              letterSpacing: 30,
+              fontSize: 24,
 
-            <Text
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                marginVertical: 10,
-              }}>
-              Job Status Details
-            </Text>
+              opacity: 0.3,
+              color: '#4388ef',
+              marginVertical: 30,
+            }}>
+            HAESOK
+          </Text>
+          <View style={{}}>
+            {donutChartData.map((data, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: '#fff',
+
+                  // marginTop: 5,
+                }}>
+                <ProgressBar percentage={data.value} label={data.label} />
+              </View>
+            ))}
           </View>
-        </ScrollView>
-      </View>
+          <Text
+            style={{
+              width: '100%',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginVertical: 20,
+              color:"#000"
+            }}>
+            Total Job Details
+          </Text>
+        </View>
+        <View style={{marginVertical: 20}}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'flex-end',
+              backgroundColor: '#fff',
+              marginVertical: 5,
+            }}>
+            <TestDonutChart data={pieChartData} />
+          </View>
+
+          <Text
+            style={{
+              width: '100%',
+              textAlign: 'center',
+              fontWeight: 'bold',
+              marginVertical: 5,
+              color:"#000"
+            }}>
+            Job Status Details
+          </Text>
+        </View>
+      </ScrollView>
     </View>
   );
 };

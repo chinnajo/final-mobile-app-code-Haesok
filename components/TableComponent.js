@@ -8,50 +8,37 @@ import api from '../axios';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // marginTop:-10,
-    //  borderWidth:1,
-    //  borderColor: '#849eae',
   },
   tableContainer: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
 
-    // marginTop: 10,
-    borderColor: '#849eae',
-    borderRadius: 5,
-    // paddingVertical:10,
-    // paddingHorizontal:5,
-    height: 60,
+    borderColor: '#000',
   },
   head: {
-    height: 58,
-    backgroundColor: '#fff',
-    // borderWidth: 2,
-    // borderColor: '#9DB2BF',
-
-    backgroundColor: '#e8f0fd',
-    borderRadius: 4,
-    marginBottom: 10,
-    // paddingBottom:5
-    // padding:5
+    height: 60,
+    
+    backgroundColor: '#d0e1fb',
   },
   headText: {
     fontWeight: 'bold',
     fontSize: 14,
     textAlign: 'center',
     color: '#000',
+    paddingHorizontal:2
   },
   rowText: {
     textAlign: 'center',
     fontSize: 13,
     color: 'black',
-    // borderWidth:1,
-    // borderColor:'#9DB2BF',
+    height: 60,
     paddingVertical: 10,
-    paddingHorizontal: 2,
-    marginHorizontal: 2,
+    paddingHorizontal: 3,
+    marginHorizontal: 3,
+    marginTop: 10,
   },
   rowPressable: {
-    paddingTop: 10,
+    paddingVertical: 2,
+    paddingHorizontal:2
   },
 });
 
@@ -66,11 +53,7 @@ const MyDataTable = ({headers, data}) => {
     <View style={styles.container}>
       <View style={styles.tableContainer}>
         <Table>
-          <Row
-            data={headers}
-            style={styles.head}
-            textStyle={styles.headText}
-          />
+          <Row data={headers} style={styles.head} textStyle={styles.headText} />
         </Table>
       </View>
 

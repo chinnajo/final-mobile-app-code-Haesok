@@ -18,14 +18,18 @@ import {faCircleUser} from '@fortawesome/free-solid-svg-icons/faCircleUser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomHeaderTitle from './HeaderTitle';
 import CustomEmailTitle from './EmailTitle';
+import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
+import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 
 import api from '../axios';
 
-library.add(faCircleUser);
+library.add(faCircleUser, faEye, faEyeSlash);
 
 const HeaderRightIcon = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [newPasswordVisibility, setNewPasswordVisibility] = useState(true);
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const navigation = useNavigation();
@@ -33,6 +37,14 @@ const HeaderRightIcon = () => {
   const handleUpdatePassword = () => {
     setModalVisible(false);
     setPasswordModalVisible(true);
+  };
+
+  const handlePasswordVisibility = () => {
+    setPasswordVisibility(!passwordVisibility);
+  };
+
+  const handleNewPasswordVisibility = () => {
+    setNewPasswordVisibility(!newPasswordVisibility);
   };
 
   const handleLogout = async () => {
@@ -94,9 +106,9 @@ const HeaderRightIcon = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#1363DF',
-                borderRadius: 20,
+                borderRadius: 5,
                 height: 40,
-                width: 170,
+                width: 200,
               }}
               onPress={() => setModalVisible(false)}>
               <Text style={styles.modalButtonText}>Close</Text>
@@ -114,20 +126,42 @@ const HeaderRightIcon = () => {
               style={{margin: 10, padding: 10, fontWeight: 600, color: '#000'}}>
               Update Password
             </Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Old password"
-              secureTextEntry
-              value={oldPassword}
-              onChangeText={text => setOldPassword(text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="New Password"
-              secureTextEntry
-              value={newPassword}
-              onChangeText={text => setNewPassword(text)}
-            />
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Old password"
+                placeholderTextColor="#000"
+                secureTextEntry={passwordVisibility}
+                value={oldPassword}
+                onChangeText={text => setOldPassword(text)}
+              />
+              <View style={{position: 'absolute', right: 10, top: 10}}>
+                <TouchableOpacity onPress={handlePasswordVisibility}>
+                  <FontAwesomeIcon
+                    icon={passwordVisibility ? faEyeSlash : faEye}
+                    style={{color: '#1363DF'}}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="New Password"
+                placeholderTextColor="#000"
+                secureTextEntry={newPasswordVisibility}
+                value={newPassword}
+                onChangeText={text => setNewPassword(text)}
+              />
+              <View style={{position: 'absolute', right: 10, top: 10}}>
+                <TouchableOpacity onPress={handleNewPasswordVisibility}>
+                  <FontAwesomeIcon
+                    icon={newPasswordVisibility ?faEyeSlash : faEye}
+                    style={{color: '#1363DF'}}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={{
@@ -184,9 +218,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#1363DF',
-    borderRadius: 20,
+    borderRadius: 5,
     height: 40,
-    width: 170,
+    width: 200,
   },
   modalButtonText: {
     fontSize: 14,
@@ -198,6 +232,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     backgroundColor: '#dde6f7',
+    color: '#000',
+    position: 'relative',
   },
   buttonContainer: {
     flexDirection: 'row',

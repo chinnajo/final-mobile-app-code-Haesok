@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
-
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  Alert,
   Image,
   TextInput,
   TouchableOpacity,
@@ -17,18 +15,52 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faFilePen} from '@fortawesome/free-solid-svg-icons/faFilePen';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
+import {faFingerprint} from '@fortawesome/free-solid-svg-icons/faFingerprint'; // Import fingerprint icon
 import {useNavigation} from '@react-navigation/native';
+import TouchID from 'react-native-touch-id'; // Import TouchID module
 import api from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-library.add(faEye, faEyeSlash, faFilePen);
+library.add(faEye, faEyeSlash, faFilePen, faFingerprint);
 
-const LoginScreen = () => {
+const LoginFinger = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [fingerprintSupported, setFingerprintSupported] = useState(false);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    checkFingerprintSupport();
+  }, []);
+
+  const checkFingerprintSupport = async () => {
+    try {
+      const isSupported = await TouchID.isSupported();
+      setFingerprintSupported(isSupported);
+
+      if (isSupported) {
+        handleFingerprintAuth(); // Attempt fingerprint login if supported
+      }
+    } catch (error) {
+      console.log('Fingerprint not supported', error);
+    }
+  };
+
+  const handleFingerprintAuth = async () => {
+    try {
+      const authenticated = await TouchID.authenticate(
+        'Authenticate with fingerprint',
+      );
+      if (authenticated) {
+        // Fingerprint authentication successful, log in the user
+        handleLogin();
+      }
+    } catch (error) {
+      console.log('Fingerprint authentication failed', error);
+    }
+  };
 
   const handlePasswordVisibility = () => {
     setPasswordVisibility(!passwordVisibility);
@@ -37,13 +69,16 @@ const LoginScreen = () => {
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
+
   const clear = () => {
     // setEmail('');
     setPassword('');
   };
+
   const handleInputChange = text => {
     setInputValue(text);
   };
+
   const handleSubmit = async () => {
     const body = {
       email: inputValue,
@@ -58,9 +93,6 @@ const LoginScreen = () => {
     } else {
       ToastAndroid.show('This field cannot be empty !', ToastAndroid.SHORT);
     }
-
-    // console.log('User input:', inputValue);
-    // Alert.alert('Password has been sent to your Email!');
   };
 
   const handleLogin = async () => {
@@ -151,12 +183,31 @@ const LoginScreen = () => {
             <Text style={styles.loginText}>LOGIN</Text>
           </TouchableOpacity>
 
-          <View
-            style={{flex: 0.2, justifyContent: 'center', alignItems: 'center', marginVertical: 20}}>
-            <TouchableOpacity onPress={toggleModal}>
-              <Text style={{color: '#000'}}>
-                Forgot Password?
+          {fingerprintSupported && (
+            <TouchableOpacity
+              style={styles.fingerprintButton}
+              onPress={handleFingerprintAuth}>
+              <FontAwesomeIcon
+                icon={faFingerprint}
+                style={styles.fingerprintIcon}
+                size={20}
+              />
+              <Text style={styles.fingerprintText}>
+                Log in with Fingerprint
               </Text>
+            </TouchableOpacity>
+          )}
+
+          <View
+            style={{
+              flex: 0.2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 10,
+              
+            }}>
+            <TouchableOpacity onPress={toggleModal}>
+              <Text style={{color: '#000'}}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 
@@ -267,8 +318,8 @@ const styles = StyleSheet.create({
   centeredView: {
     backgroundColor: '#fff', // Background color for the centered view
     width: '85%', // Set a specific width for the centered View (you can adjust this value)
-    height: "80%", // Set a specific height for the centered View (you can adjust this value)
-    justifyContent:'center'
+    height: '90%', // Set a specific height for the centered View (you can adjust this value)
+    justifyContent: 'center',
   },
   logo: {
     fontWeight: 'bold',
@@ -283,7 +334,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginBottom: 20,
     justifyContent: 'center',
-    alignSelf:'center',
+    alignSelf: 'center',
     padding: 10,
     position: 'relative',
     minWidth: 300,
@@ -293,6 +344,19 @@ const styles = StyleSheet.create({
     height: 50,
     color: '#000',
   },
+  fingerprintIcon: {
+    alignSelf: 'center',
+    marginHorizontal:10
+  },
+  fingerprintText: {
+    alignSelf: 'center',
+    color:'#000'
+  },
+  fingerprintButton: {
+    alignSelf: 'center',
+    marginVertical:30,
+    flexDirection:'row'
+  },
   loginBtn: {
     width: '80%',
     backgroundColor: '#1363DF',
@@ -300,7 +364,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 10,
     alignSelf: 'center',
     minWidth: 300,
@@ -311,4 +375,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginFinger;

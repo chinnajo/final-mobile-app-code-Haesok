@@ -12,11 +12,11 @@ const TestDonutChart = ({ data }) => {
     }));
   
     return (
-      <View style={{ flexDirection: 'row',alignContent:'space-between' }}>
+      <View style={{ flexDirection: 'row',alignContent:'space-around'}}>
         <View style={{ flex: 0.6 }}>
-          <PieChart style={{ height: 200 }} data={pieData} />
+          <PieChart style={{ height: 200}} data={pieData} />
         </View>
-        <View style={{ flex: 0.4, alignItems: 'flex-start' ,justifyContent:'center',marginLeft:10}}>
+        <View style={{ flex: 0.4, alignItems: 'flex-start' ,justifyContent:'center'}}>
           {data.map((item, index) => (
             <View key={`label-${index}`} style={{ flexDirection: 'row',marginVertical:5 }}>
               <View
@@ -27,10 +27,12 @@ const TestDonutChart = ({ data }) => {
                   marginRight: 15,
                   marginTop:5,
                   borderRadius: 5,
+                  
+                  
                 }}
               />
-              <Text style={{fontSize:14}}>{item.label}</Text>
-              <Text style={{ marginLeft: 10 }}>{`${item.value}%`}</Text>
+              <Text style={{fontSize:12,    color:"#000",fontWeight:'bold'}}>{item.label}</Text>
+              <Text style={{ marginLeft: 12 ,    color:"#000"}}>{`${item.value}%`}</Text>
             </View>
           ))}
         </View>

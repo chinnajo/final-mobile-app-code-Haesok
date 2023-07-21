@@ -18,6 +18,7 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faCircleDown} from '@fortawesome/free-solid-svg-icons/faCircleDown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import downloadFile from './DownloadFile';
+
 import api from '../axios';
 library.add(faCircleDown);
 
@@ -80,17 +81,25 @@ const DocumentScreen = () => {
     const data = response.data;
     setjobdatas(data);
   }
-  // console.log(jobdatas);
+  console.log(jobdatas);
 
   return (
     <View>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+          marginVertical: 10,
+          paddingVertical: 10,
+          fontSize: 12,
+        }}>
+        <View style={{width: '84%', alignSelf: 'center', maxWidth: 400}}>
         <Text
           style={{
             textAlign: 'center',
             marginVertical: 20,
             fontWeight: 'bold',
             fontSize: 16,
+            color:"#000"
           }}>
           Document Details
         </Text>
@@ -101,6 +110,7 @@ const DocumentScreen = () => {
                 textAlign: 'left',
                 fontWeight: 'bold',
                 marginLeft: 40,
+                color:"#000"
               }}>
               {data.name.toString()}
             </Text>
@@ -153,6 +163,7 @@ const DocumentScreen = () => {
           }}>
           <Text style={{color: '#fff'}}>Home</Text>
         </TouchableOpacity>
+       </View>
       </ScrollView>
     </View>
   );
@@ -166,7 +177,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#dde6f7',
     padding: 10,
     margin: 10,
-    width: 300,
+    width: "90%",
+    maxWidth:400,
     height: 40,
     marginVertical: 10,
     color: '#000',

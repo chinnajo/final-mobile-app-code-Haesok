@@ -25,8 +25,10 @@ const CustomEmailTitle = ({color, fontsize}) => {
         color: color,
         fontSize: fontsize,
         fontWeight: 'bold',
-        marginVertical: 10,
-      }}>{` testemail@companyname.com `}</Text>
+        marginVertical:10,
+        color:"#000"
+       
+      }}>{` ${headerEmail} `}</Text>
   );
 };
 // const styles = StyleSheet.create({
