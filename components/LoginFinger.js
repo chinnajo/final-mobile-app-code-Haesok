@@ -9,6 +9,7 @@ import {
   Modal,
   ScrollView,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
@@ -29,6 +30,7 @@ const LoginFinger = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [fingerprintSupported, setFingerprintSupported] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -100,6 +102,7 @@ const LoginFinger = () => {
       email: email,
       password: password,
     };
+    setIsLoading(true);
     await api
       .post('/login/mobileapp/client', body)
       .then(response => {
@@ -134,7 +137,9 @@ const LoginFinger = () => {
         }
         console.log(error);
       });
-
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
     clear();
   };
 
@@ -179,8 +184,15 @@ const LoginFinger = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginText}>LOGIN</Text>
+          <TouchableOpacity
+            disabled={isLoading}
+            style={styles.loginBtn}
+            onPress={handleLogin}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={{color: 'white'}}>Login</Text>
+            )}
           </TouchableOpacity>
 
           {fingerprintSupported && (
@@ -204,7 +216,6 @@ const LoginFinger = () => {
               justifyContent: 'center',
               alignItems: 'center',
               marginVertical: 10,
-              
             }}>
             <TouchableOpacity onPress={toggleModal}>
               <Text style={{color: '#000'}}>Forgot Password?</Text>
@@ -346,16 +357,16 @@ const styles = StyleSheet.create({
   },
   fingerprintIcon: {
     alignSelf: 'center',
-    marginHorizontal:10
+    marginHorizontal: 10,
   },
   fingerprintText: {
     alignSelf: 'center',
-    color:'#000'
+    color: '#000',
   },
   fingerprintButton: {
     alignSelf: 'center',
-    marginVertical:30,
-    flexDirection:'row'
+    marginVertical: 30,
+    flexDirection: 'row',
   },
   loginBtn: {
     width: '80%',

@@ -44,7 +44,7 @@ export default function TabScreen() {
         }}
       />
       <JobsTab.Screen
-        name="Current Jobs"
+        name="Current "
         component={CurrentScreen}
         options={{
         

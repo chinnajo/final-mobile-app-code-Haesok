@@ -1,5 +1,6 @@
 import RNFetchBlob from 'react-native-blob-util';
 import {Platform, ToastAndroid, PermissionsAndroid} from 'react-native';
+import Pdf from 'react-native-pdf';
 
 const downloadFile = async (url, fileName) => {
   const {dirs} = RNFetchBlob.fs;

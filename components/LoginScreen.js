@@ -11,6 +11,7 @@ import {
   Modal,
   ScrollView,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
@@ -28,6 +29,7 @@ const LoginScreen = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const handlePasswordVisibility = () => {
@@ -68,6 +70,7 @@ const LoginScreen = () => {
       email: email,
       password: password,
     };
+    setIsLoading(true);
     await api
       .post('/login/mobileapp/client', body)
       .then(response => {
@@ -102,6 +105,9 @@ const LoginScreen = () => {
         }
         console.log(error);
       });
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
     clear();
   };
@@ -147,16 +153,27 @@ const LoginScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginText}>LOGIN</Text>
+          <TouchableOpacity
+            disabled={isLoading}
+            style={styles.loginBtn}
+            onPress={handleLogin}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={{color: 'white'}}>Load Data</Text>
+            )}
           </TouchableOpacity>
+          {isLoading && <Text>Loading data...</Text>}
 
           <View
-            style={{flex: 0.2, justifyContent: 'center', alignItems: 'center', marginVertical: 20}}>
+            style={{
+              flex: 0.2,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 20,
+            }}>
             <TouchableOpacity onPress={toggleModal}>
-              <Text style={{color: '#000'}}>
-                Forgot Password?
-              </Text>
+              <Text style={{color: '#000'}}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
 
@@ -267,8 +284,8 @@ const styles = StyleSheet.create({
   centeredView: {
     backgroundColor: '#fff', // Background color for the centered view
     width: '85%', // Set a specific width for the centered View (you can adjust this value)
-    height: "80%", // Set a specific height for the centered View (you can adjust this value)
-    justifyContent:'center'
+    height: '80%', // Set a specific height for the centered View (you can adjust this value)
+    justifyContent: 'center',
   },
   logo: {
     fontWeight: 'bold',
@@ -283,7 +300,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginBottom: 20,
     justifyContent: 'center',
-    alignSelf:'center',
+    alignSelf: 'center',
     padding: 10,
     position: 'relative',
     minWidth: 300,

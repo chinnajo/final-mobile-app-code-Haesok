@@ -199,7 +199,7 @@ const HomeScreen = () => {
               marginVertical: 20,
               color:"#000"
             }}>
-            Total Job Details
+            Total Jobs
           </Text>
         </View>
         <View style={{marginVertical: 20}}>
@@ -221,7 +221,7 @@ const HomeScreen = () => {
               marginVertical: 5,
               color:"#000"
             }}>
-            Job Status Details
+            Shipment Status
           </Text>
         </View>
       </ScrollView>
