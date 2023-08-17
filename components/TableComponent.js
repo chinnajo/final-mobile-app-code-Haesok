@@ -46,9 +46,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
-    marginBottom: 10,
+  
     borderRadius:5,
-    marginHorizontal:2
+    marginHorizontal:2,
+    marginVertical:4
   },
 });
 
