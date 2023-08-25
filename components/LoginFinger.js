@@ -16,9 +16,9 @@ import {library} from '@fortawesome/fontawesome-svg-core';
 import {faFilePen} from '@fortawesome/free-solid-svg-icons/faFilePen';
 import {faEye} from '@fortawesome/free-solid-svg-icons/faEye';
 import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
-import {faFingerprint} from '@fortawesome/free-solid-svg-icons/faFingerprint'; // Import fingerprint icon
+import {faFingerprint} from '@fortawesome/free-solid-svg-icons/faFingerprint';
 import {useNavigation} from '@react-navigation/native';
-import TouchID from 'react-native-touch-id'; // Import TouchID module
+import TouchID from 'react-native-touch-id';
 import api from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 library.add(faEye, faEyeSlash, faFilePen, faFingerprint);
@@ -35,6 +35,18 @@ const LoginFinger = () => {
 
   useEffect(() => {
     checkFingerprintSupport();
+
+    // Check if login data is saved in AsyncStorage
+    // AsyncStorage.getItem('email').then(savedEmail => {
+    //   if (savedEmail) {
+    //     setEmail(savedEmail);
+    //     AsyncStorage.getItem('password').then(savedPassword => {
+    //       if (savedPassword) {
+    //         setPassword(savedPassword);
+    //       }
+    //     });
+    //   }
+    // });
   }, []);
 
   const checkFingerprintSupport = async () => {
@@ -55,6 +67,7 @@ const LoginFinger = () => {
       const authenticated = await TouchID.authenticate(
         'Authenticate with fingerprint',
       );
+      console.log(TouchID);
       if (authenticated) {
         // Fingerprint authentication successful, log in the user
         handleLogin();
@@ -74,7 +87,7 @@ const LoginFinger = () => {
 
   const clear = () => {
     // setEmail('');
-    setPassword('');
+    // setPassword('');
   };
 
   const handleInputChange = text => {
@@ -98,9 +111,13 @@ const LoginFinger = () => {
   };
 
   const handleLogin = async () => {
+    // clear();
+    const email1 = await AsyncStorage.getItem('email');
+    const password1 = await AsyncStorage.getItem('password');
+    // console.log(email1, password1, 'sfdfsdf');
     const body = {
-      email: email,
-      password: password,
+      email: email ? email : email1,
+      password: password ? password : password1,
     };
     setIsLoading(true);
     await api
@@ -109,6 +126,7 @@ const LoginFinger = () => {
         const data = response.data;
         AsyncStorage.setItem('authToken', data.token);
         AsyncStorage.setItem('email', data.email);
+        AsyncStorage.setItem('password', body.password); // Save password
         const client = data.client;
         return AsyncStorage.getItem('authToken')
           .then(token =>
@@ -175,10 +193,11 @@ const LoginFinger = () => {
               onChangeText={text => setPassword(text)}
               value={password}
             />
-            <View style={{position: 'absolute', right: 10}}>
+            <View style={{position: 'absolute', right: 20}}>
               <TouchableOpacity onPress={handlePasswordVisibility}>
                 <FontAwesomeIcon
                   icon={passwordVisibility ? faEyeSlash : faEye}
+                  size={20}
                   style={{color: '#1363DF'}}
                 />
               </TouchableOpacity>
@@ -256,7 +275,6 @@ const LoginFinger = () => {
                     style={{
                       borderRadius: 10,
                       borderColor: '#1363DF',
-
                       backgroundColor: '#dde6f7',
                       padding: 10,
                       margin: 10,

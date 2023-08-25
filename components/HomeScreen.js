@@ -120,12 +120,15 @@ const HomeScreen = () => {
       // console.log(colors);
       for (let i = 0; i < formattedData.length; i++) {
         const total = data.length;
+        formattedData[i].count = formattedData[i].value;
         const a = (formattedData[i].value / total) * 100;
         const aa = Math.floor(a);
         formattedData[i].color = colors[i];
         formattedData[i].value = aa;
+
         // console.log(total, a, 'sdfsfd');
       }
+      console.log(formattedData, 'total');
       setPieChartData(formattedData);
     } catch (error) {
       console.error('An error occurred:', error);
@@ -142,7 +145,7 @@ const HomeScreen = () => {
         },
       });
       const data = response.data;
-      // console.log(data, 'data')
+      console.log(data, 'data');
       setDonutChartData(data);
     } catch (error) {
       console.error('An error occurred:', error);
@@ -163,7 +166,12 @@ const HomeScreen = () => {
         backgroundColor: '#fff',
         justifyContent: 'space-around',
       }}>
-      <ScrollView contentContainerStyle={{flex:1,justifyContent:'space-around',alignContent:'center'}}>
+      <ScrollView
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: 'space-around',
+          alignContent: 'center',
+        }}>
         <View style={{justifyContent: 'space-evenly'}}>
           <Text
             style={{
@@ -187,7 +195,10 @@ const HomeScreen = () => {
 
                   // marginTop: 5,
                 }}>
-                <ProgressBar percentage={data.value} label={data.label} />
+                <ProgressBar
+                  percentage={data.value}
+                  count={data.count}
+                  label={data.label}></ProgressBar>
               </View>
             ))}
           </View>
@@ -197,7 +208,7 @@ const HomeScreen = () => {
               textAlign: 'center',
               fontWeight: 'bold',
               marginVertical: 20,
-              color:"#000"
+              color: '#000',
             }}>
             Total Jobs
           </Text>
@@ -205,10 +216,11 @@ const HomeScreen = () => {
         <View style={{marginVertical: 20}}>
           <View
             style={{
-              justifyContent: 'center',
+            
               alignItems: 'flex-end',
               backgroundColor: '#fff',
               marginVertical: 5,
+              justifyContent:'space-around'
             }}>
             <TestDonutChart data={pieChartData} />
           </View>
@@ -219,7 +231,7 @@ const HomeScreen = () => {
               textAlign: 'center',
               fontWeight: 'bold',
               marginVertical: 5,
-              color:"#000"
+              color: '#000',
             }}>
             Shipment Status
           </Text>

@@ -1,6 +1,6 @@
 {
   "name": "haesok",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "android": "react-native run-android ",
@@ -40,6 +40,7 @@
     "react-native-chart-kit": "^6.12.0",
     "react-native-dotenv": "^3.4.8",
     "react-native-dropdown-picker": "^5.4.6",
+    "react-native-fs": "^2.20.0",
     "react-native-image-viewing": "^0.2.2",
     "react-native-paper": "^5.8.0",
     "react-native-pdf": "^6.7.1",

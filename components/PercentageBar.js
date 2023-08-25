@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 
-const ProgressBar = ({percentage, label}) => {
+const ProgressBar = ({percentage, label ,count}) => {
   return (
     <View>
       <View>
-      <Text style={styles.label}>{`${label} : ${percentage}%`}</Text>
+      <Text style={styles.label}>{`${label} : ${count} (${percentage}%)`}</Text>
     
       
       </View>

@@ -175,8 +175,20 @@ const DocumentScreen = () => {
               }}
               style={styles.pdf}
             />
-            <TouchableOpacity onPress={toggleModal}>
-              <Text>Close</Text>
+            <TouchableOpacity
+              style={{
+                width: 110,
+                height: 35,
+                backgroundColor: '#1363DF',
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                padding: 8,
+                marginVertical: 20,
+              }}
+              onPress={toggleModal}>
+              <Text style={{color: '#fff'}}>Close</Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -187,8 +199,20 @@ const DocumentScreen = () => {
           onRequestClose={toggleImageModal}>
           <View style={{flex: 1}}>
             <Image source={{uri: imageUrl}} style={styles.image} />
-            <TouchableOpacity onPress={toggleImageModal}>
-              <Text>Close</Text>
+            <TouchableOpacity
+              style={{
+                width: 110,
+                height: 35,
+                backgroundColor: '#1363DF',
+                borderRadius: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+                padding: 8,
+                marginVertical: 20,
+              }}
+              onPress={toggleImageModal}>
+              <Text style={{color: '#fff'}}>Close</Text>
             </TouchableOpacity>
           </View>
         </Modal>

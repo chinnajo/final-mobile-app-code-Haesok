@@ -1,7 +1,12 @@
-
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {View, StyleSheet, TouchableOpacity, ScrollView,TextInput} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+} from 'react-native';
 import {Table, Row} from 'react-native-table-component';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../axios';
@@ -46,10 +51,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     paddingHorizontal: 10,
-  
-    borderRadius:5,
-    marginHorizontal:2,
-    marginVertical:4
+    color: '#000',
+    borderRadius: 5,
+    marginHorizontal: 2,
+    marginVertical: 4,
   },
 });
 
@@ -78,6 +83,7 @@ const MyDataTable = ({headers, data}) => {
       <TextInput
         style={styles.searchInput}
         placeholder="Search..."
+        placeholderTextColor="#000"
         value={searchQuery}
         onChangeText={handleSearch}
       />

@@ -50,6 +50,8 @@ const HeaderRightIcon = () => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem('authToken');
     await AsyncStorage.removeItem('client');
+    await AsyncStorage.removeItem('email');
+    await AsyncStorage.removeItem('password');
     navigation.navigate('Login');
   };
 
@@ -139,6 +141,7 @@ const HeaderRightIcon = () => {
                 <TouchableOpacity onPress={handlePasswordVisibility}>
                   <FontAwesomeIcon
                     icon={passwordVisibility ? faEyeSlash : faEye}
+                    size={20}
                     style={{color: '#1363DF'}}
                   />
                 </TouchableOpacity>
@@ -156,7 +159,8 @@ const HeaderRightIcon = () => {
               <View style={{position: 'absolute', right: 10, top: 10}}>
                 <TouchableOpacity onPress={handleNewPasswordVisibility}>
                   <FontAwesomeIcon
-                    icon={newPasswordVisibility ?faEyeSlash : faEye}
+                    icon={newPasswordVisibility ? faEyeSlash : faEye}
+                    size={20}
                     style={{color: '#1363DF'}}
                   />
                 </TouchableOpacity>

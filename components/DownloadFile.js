@@ -1,9 +1,10 @@
-import RNFetchBlob from 'react-native-blob-util';
+import RNFetchBlob from 'rn-fetch-blob';
 import {Platform, ToastAndroid, PermissionsAndroid} from 'react-native';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 const downloadFile = async (url, fileName) => {
-  const {dirs} = RNFetchBlob.fs;
-  const downloadsPath = dirs.DownloadDir; // Use DocumentDir for scoped storage
+  const {config, fs} = RNFetchBlob;
+  const downloadsPath = fs.dirs.DownloadDir;
   const fileDir = `${downloadsPath}/${fileName}`;
 
   try {
@@ -14,22 +15,39 @@ const downloadFile = async (url, fileName) => {
       );
     }
 
-    const response = await RNFetchBlob.config({
-      fileCache: true,
-      appendExt: 'pdf', // specify the file extension
-      path: fileDir,
-    }).fetch('GET', url);
+    // Check if the file already exists
+    const exists = await fs.exists(fileDir);
 
-    console.log('File downloaded to:', response.path());
+    if (exists) {
+      // File already exists, do not download it again
+      console.log('File already exists:', fileDir);
+      ToastAndroid.show('File already exists!', ToastAndroid.SHORT);
+      return;
+    }
 
-    // Alert the user that the download was successful
-    ToastAndroid.show('Downloaded Successfully', ToastAndroid.SHORT);
-
-    // Additional logic after successful download, e.g., open the file or show a notification
+    RNFetchBlob.config({
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: false,
+        mime: 'application/octet-stream', // Adjust the mime type according to your file type
+        title: fileName,
+        path: fileDir,
+        description: 'File downloaded by download manager.',
+      },
+    })
+      .fetch('GET', url)
+      .then(resp => {
+        console.log('File downloaded to:', resp.path());
+        ToastAndroid.show('Downloaded Successfully', ToastAndroid.SHORT);
+        // Additional logic after successful download, e.g., open the file or show a notification
+      })
+      .catch(error => {
+        console.log('Error downloading file:', error);
+        ToastAndroid.show('Error downloading!', ToastAndroid.SHORT);
+      });
   } catch (error) {
-    console.log('Error downloading file:', error);
-    // Handle the error appropriately
-    ToastAndroid.show('Error downloading!', ToastAndroid.SHORT);
+    console.log('Error requesting storage permission:', error);
+    ToastAndroid.show('Error requesting permission!', ToastAndroid.SHORT);
   }
 };
 
