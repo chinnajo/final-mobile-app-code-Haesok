@@ -10,6 +10,7 @@ import {
   ScrollView,
   ToastAndroid,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {library} from '@fortawesome/fontawesome-svg-core';
@@ -21,6 +22,11 @@ import {useNavigation} from '@react-navigation/native';
 import TouchID from 'react-native-touch-id';
 import api from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  BiometricPrompt,
+  SUPPORTED_BIOMETRY_TYPES,
+} from 'react-native-biometrics';
+
 library.add(faEye, faEyeSlash, faFilePen, faFingerprint);
 
 const LoginFinger = () => {
@@ -31,30 +37,36 @@ const LoginFinger = () => {
   const [inputValue, setInputValue] = useState('');
   const [fingerprintSupported, setFingerprintSupported] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Initialize with true if the user is initially logged in
+
   const navigation = useNavigation();
 
   useEffect(() => {
+    checkLoginStatus();
     checkFingerprintSupport();
-
-    // Check if login data is saved in AsyncStorage
-    // AsyncStorage.getItem('email').then(savedEmail => {
-    //   if (savedEmail) {
-    //     setEmail(savedEmail);
-    //     AsyncStorage.getItem('password').then(savedPassword => {
-    //       if (savedPassword) {
-    //         setPassword(savedPassword);
-    //       }
-    //     });
-    //   }
-    // });
   }, []);
+  
+
+  const checkLoginStatus = async () => {
+    const email1 = await AsyncStorage.getItem('email');
+    const password1 = await AsyncStorage.getItem('password');
+
+    if (email1 !== null && password1 !== null) {
+      setIsLoggedIn(true); // User has saved email and password, consider them as logged in
+      console.log('giri loki');
+    } else {
+      setIsLoggedIn(false); // No saved credentials, consider them as logged out
+      console.log('giri');
+    }
+  };
 
   const checkFingerprintSupport = async () => {
     try {
       const isSupported = await TouchID.isSupported();
       setFingerprintSupported(isSupported);
 
-      if (isSupported) {
+      if (isSupported && isLoggedIn) {
         handleFingerprintAuth(); // Attempt fingerprint login if supported
       }
     } catch (error) {
@@ -67,7 +79,7 @@ const LoginFinger = () => {
       const authenticated = await TouchID.authenticate(
         'Authenticate with fingerprint',
       );
-      console.log(TouchID);
+
       if (authenticated) {
         // Fingerprint authentication successful, log in the user
         handleLogin();
@@ -86,8 +98,8 @@ const LoginFinger = () => {
   };
 
   const clear = () => {
-    // setEmail('');
-    // setPassword('');
+    setEmail('');
+    setPassword('');
   };
 
   const handleInputChange = text => {
@@ -114,7 +126,7 @@ const LoginFinger = () => {
     // clear();
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
-    // console.log(email1, password1, 'sfdfsdf');
+    console.log(email1, password1, 'sfdfsdf');
     const body = {
       email: email ? email : email1,
       password: password ? password : password1,
@@ -126,6 +138,7 @@ const LoginFinger = () => {
         const data = response.data;
         AsyncStorage.setItem('authToken', data.token);
         AsyncStorage.setItem('email', data.email);
+
         AsyncStorage.setItem('password', body.password); // Save password
         const client = data.client;
         return AsyncStorage.getItem('authToken')
@@ -214,7 +227,7 @@ const LoginFinger = () => {
             )}
           </TouchableOpacity>
 
-          {fingerprintSupported && (
+          {/* {isLoggedIn && fingerprintSupported && (
             <TouchableOpacity
               style={styles.fingerprintButton}
               onPress={handleFingerprintAuth}>
@@ -227,7 +240,7 @@ const LoginFinger = () => {
                 Log in with Fingerprint
               </Text>
             </TouchableOpacity>
-          )}
+          )} */}
 
           <View
             style={{

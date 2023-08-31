@@ -51,7 +51,9 @@ const HeaderRightIcon = () => {
     await AsyncStorage.removeItem('authToken');
     await AsyncStorage.removeItem('client');
     await AsyncStorage.removeItem('email');
+
     await AsyncStorage.removeItem('password');
+
     navigation.navigate('Login');
   };
 
