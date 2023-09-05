@@ -44,20 +44,19 @@ const LoginFinger = () => {
 
   useEffect(() => {
     checkLoginStatus();
-    checkFingerprintSupport();
   }, []);
-  
 
   const checkLoginStatus = async () => {
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
 
-    if (email1 !== null && password1 !== null) {
-      setIsLoggedIn(true); // User has saved email and password, consider them as logged in
-      console.log('giri loki');
-    } else {
+    if (email1 === null && password1 === null) {
       setIsLoggedIn(false); // No saved credentials, consider them as logged out
-      console.log('giri');
+      console.log('Logged out');
+    } else {
+      setIsLoggedIn(true); // User has saved email and password, consider them as logged in
+      console.log('Logged in');
+      checkFingerprintSupport();
     }
   };
 
@@ -137,9 +136,9 @@ const LoginFinger = () => {
       .then(response => {
         const data = response.data;
         AsyncStorage.setItem('authToken', data.token);
-        AsyncStorage.setItem('email', data.email);
+        AsyncStorage.setItem('email', body.email);
+        AsyncStorage.setItem('password', body.password);
 
-        AsyncStorage.setItem('password', body.password); // Save password
         const client = data.client;
         return AsyncStorage.getItem('authToken')
           .then(token =>
@@ -168,6 +167,7 @@ const LoginFinger = () => {
         }
         console.log(error);
       });
+
     setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -226,8 +226,8 @@ const LoginFinger = () => {
               <Text style={{color: 'white'}}>Login</Text>
             )}
           </TouchableOpacity>
-
-          {/* {isLoggedIn && fingerprintSupported && (
+          {/* 
+          {isLoggedIn && (
             <TouchableOpacity
               style={styles.fingerprintButton}
               onPress={handleFingerprintAuth}>
@@ -241,7 +241,6 @@ const LoginFinger = () => {
               </Text>
             </TouchableOpacity>
           )} */}
-
           <View
             style={{
               flex: 0.2,
