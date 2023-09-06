@@ -35,10 +35,11 @@ const LoginFinger = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [fingerprintSupported, setFingerprintSupported] = useState(false);
+  const [fingerprintSupported, setFingerprintSupported] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFingerprintEnabled, setIsFingerprintEnabled] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Initialize with true if the user is initially logged in
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Initialize with true if the user is initially logged in
 
   const navigation = useNavigation();
 
@@ -46,11 +47,15 @@ const LoginFinger = () => {
     checkLoginStatus();
   }, []);
 
+ 
   const checkLoginStatus = async () => {
+    const authenticated = await TouchID.authenticate(
+      'Authenticate with fingerprint',
+    );
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
-
-    if (email1 === null && password1 === null) {
+    console.log(email1, password1)
+    if (email1 === null && password1 === null ) {
       setIsLoggedIn(false); // No saved credentials, consider them as logged out
       console.log('Logged out');
     } else {
@@ -81,6 +86,7 @@ const LoginFinger = () => {
 
       if (authenticated) {
         // Fingerprint authentication successful, log in the user
+        // handleLogin();
         handleLogin();
       }
     } catch (error) {
@@ -123,9 +129,9 @@ const LoginFinger = () => {
 
   const handleLogin = async () => {
     // clear();
+    // const isSupported = await TouchID.isSupported();
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
-    console.log(email1, password1, 'sfdfsdf');
     const body = {
       email: email ? email : email1,
       password: password ? password : password1,
@@ -152,6 +158,63 @@ const LoginFinger = () => {
             const clientname = clientresponse.data.name;
             AsyncStorage.setItem('client', clientname);
             console.log('login successful');
+            // setFingerprintSupported(isSupported);
+            navigation.navigate('Tab');
+            // if(fingerprintSupported === true) {
+            // showEnableFingerprintAlert()
+            // } else{
+            //   navigation.navigate('Tab');
+            // }
+
+          })
+          .catch(error => {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 400) {
+          ToastAndroid.show('Incorrect  ID  or  Password', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show('Network error', ToastAndroid.SHORT);
+        }
+        console.log(error);
+      });
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    clear();
+  };
+  const fingerprinthandleLogin = async () => {
+    // clear();
+    const email1 = await AsyncStorage.getItem('email');
+    const password1 = await AsyncStorage.getItem('password');
+    const body = {
+      email: email1,
+      password: password1,
+    };
+    setIsLoading(true);
+    await api
+      .post('/login/mobileapp/client', body)
+      .then(response => {
+        const data = response.data;
+        const client = data.client;
+        return AsyncStorage.getItem('authToken')
+          .then(token =>
+            api.get(`/clients/mobileapp/${client}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          )
+          .then(clientresponse => {
+            // const clientname = clientresponse.data.name;
+            // AsyncStorage.setItem('client', clientname);
+            console.log('login successful');
+            // showEnableFingerprintAlert()
+            // if(isFingerprintEnabled){
+            // }
             navigation.navigate('Tab');
           })
           .catch(error => {
