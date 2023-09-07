@@ -20,6 +20,7 @@ import {faEyeSlash} from '@fortawesome/free-solid-svg-icons/faEyeSlash';
 import {faFingerprint} from '@fortawesome/free-solid-svg-icons/faFingerprint';
 import {useNavigation} from '@react-navigation/native';
 import TouchID from 'react-native-touch-id';
+
 import api from '../axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -28,6 +29,7 @@ import {
 } from 'react-native-biometrics';
 
 library.add(faEye, faEyeSlash, faFilePen, faFingerprint);
+
 
 const LoginFinger = () => {
   const [email, setEmail] = useState('');
@@ -38,24 +40,20 @@ const LoginFinger = () => {
   const [fingerprintSupported, setFingerprintSupported] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFingerprintEnabled, setIsFingerprintEnabled] = useState(false);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Initialize with true if the user is initially logged in
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Initialize with true if the user is initially logged in
+  const biometricPrompt = new BiometricPrompt();
   const navigation = useNavigation();
 
   useEffect(() => {
     checkLoginStatus();
   }, []);
 
- 
   const checkLoginStatus = async () => {
-    const authenticated = await TouchID.authenticate(
-      'Authenticate with fingerprint',
-    );
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
-    console.log(email1, password1)
-    if (email1 === null && password1 === null ) {
+    console.log(email1, password1);
+    if (email1 === null && password1 === null) {
       setIsLoggedIn(false); // No saved credentials, consider them as logged out
       console.log('Logged out');
     } else {
@@ -71,7 +69,7 @@ const LoginFinger = () => {
       setFingerprintSupported(isSupported);
 
       if (isSupported && isLoggedIn) {
-        handleFingerprintAuth(); // Attempt fingerprint login if supported
+        handleFingerprintAuth();
       }
     } catch (error) {
       console.log('Fingerprint not supported', error);
@@ -87,7 +85,7 @@ const LoginFinger = () => {
       if (authenticated) {
         // Fingerprint authentication successful, log in the user
         // handleLogin();
-        handleLogin();
+        fingerprinthandleLogin();
       }
     } catch (error) {
       console.log('Fingerprint authentication failed', error);
@@ -110,7 +108,38 @@ const LoginFinger = () => {
   const handleInputChange = text => {
     setInputValue(text);
   };
+  const showEnableFingerprintAlert = () => {
+    Alert.alert(
+      'Enable Fingerprint Login',
+      'Do you want to enable fingerprint login for this app?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => handleLogin(),
+          style: 'cancel',
+        },
+        {
+          text: 'Enable',
+          onPress: () => fingerprinthandleLogin(),
+        },
+      ],
+    );
+  };
 
+  // Function to enable fingerprint login
+  // const enableFingerprintLogin = async () => {
+  //   // Use a library like expo-local-authentication to enable fingerprint login
+  //   const hasHardware = await LocalAuthentication.hasHardwareAsync();
+  //   const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+
+  //   if (hasHardware && isEnrolled) {
+  //     setIsFingerprintEnabled(true);
+  //     // You can save the user's preference in AsyncStorage or your state management solution
+  //     // and implement the fingerprint login functionality here
+  //   } else {
+  //     Alert.alert('Fingerprint not available', 'Fingerprint authentication is not available on this device.');
+  //   }
+  // };
   const handleSubmit = async () => {
     const body = {
       email: inputValue,
@@ -130,6 +159,56 @@ const LoginFinger = () => {
   const handleLogin = async () => {
     // clear();
     // const isSupported = await TouchID.isSupported();
+    // const email1 = await AsyncStorage.getItem('email');
+    // const password1 = await AsyncStorage.getItem('password');
+    const body = {
+      email: email,
+      password: password,
+    };
+    setIsLoading(true);
+    await api
+      .post('/login/mobileapp/client', body)
+      .then(response => {
+        const data = response.data;
+        AsyncStorage.setItem('authToken', data.token);
+        // AsyncStorage.setItem('email', body.email);
+        // AsyncStorage.setItem('password', body.password);
+
+        const client = data.client;
+        return AsyncStorage.getItem('authToken')
+          .then(token =>
+            api.get(`/clients/mobileapp/${client}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
+          )
+          .then(clientresponse => {
+            const clientname = clientresponse.data.name;
+            AsyncStorage.setItem('client', clientname);
+            console.log('login successful');
+            navigation.navigate('Tab');
+          })
+          .catch(error => {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+            console.log(error);
+          });
+      })
+      .catch(error => {
+        if (error.response && error.response.status === 400) {
+          ToastAndroid.show('Incorrect  ID  or  Password', ToastAndroid.SHORT);
+        } else {
+          ToastAndroid.show('Network error', ToastAndroid.SHORT);
+        }
+        console.log(error);
+      });
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    clear();
+  };
+  const fingerprinthandleLogin = async () => {
     const email1 = await AsyncStorage.getItem('email');
     const password1 = await AsyncStorage.getItem('password');
     const body = {
@@ -158,63 +237,6 @@ const LoginFinger = () => {
             const clientname = clientresponse.data.name;
             AsyncStorage.setItem('client', clientname);
             console.log('login successful');
-            // setFingerprintSupported(isSupported);
-            navigation.navigate('Tab');
-            // if(fingerprintSupported === true) {
-            // showEnableFingerprintAlert()
-            // } else{
-            //   navigation.navigate('Tab');
-            // }
-
-          })
-          .catch(error => {
-            ToastAndroid.show('Server error', ToastAndroid.SHORT);
-            console.log(error);
-          });
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 400) {
-          ToastAndroid.show('Incorrect  ID  or  Password', ToastAndroid.SHORT);
-        } else {
-          ToastAndroid.show('Network error', ToastAndroid.SHORT);
-        }
-        console.log(error);
-      });
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    clear();
-  };
-  const fingerprinthandleLogin = async () => {
-    // clear();
-    const email1 = await AsyncStorage.getItem('email');
-    const password1 = await AsyncStorage.getItem('password');
-    const body = {
-      email: email1,
-      password: password1,
-    };
-    setIsLoading(true);
-    await api
-      .post('/login/mobileapp/client', body)
-      .then(response => {
-        const data = response.data;
-        const client = data.client;
-        return AsyncStorage.getItem('authToken')
-          .then(token =>
-            api.get(`/clients/mobileapp/${client}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }),
-          )
-          .then(clientresponse => {
-            // const clientname = clientresponse.data.name;
-            // AsyncStorage.setItem('client', clientname);
-            console.log('login successful');
-            // showEnableFingerprintAlert()
-            // if(isFingerprintEnabled){
-            // }
             navigation.navigate('Tab');
           })
           .catch(error => {
@@ -236,7 +258,6 @@ const LoginFinger = () => {
     }, 2000);
     clear();
   };
-
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -282,7 +303,7 @@ const LoginFinger = () => {
           <TouchableOpacity
             disabled={isLoading}
             style={styles.loginBtn}
-            onPress={handleLogin}>
+            onPress={showEnableFingerprintAlert}>
             {isLoading ? (
               <ActivityIndicator size="small" color="#ffffff" />
             ) : (
